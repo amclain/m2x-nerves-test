@@ -37,8 +37,13 @@ defmodule M2XNerves.Mixfile do
     [extra_applications: [:logger]]
   end
   def application(_target) do
-    [mod: {M2XNerves.Application, []},
-     extra_applications: [:logger]]
+    [
+      mod: {M2XNerves.Application, []},
+      extra_applications: [
+        :logger,
+        :httpotion,
+      ]
+    ]
   end
 
   # Dependencies can be Hex packages:
@@ -55,6 +60,8 @@ defmodule M2XNerves.Mixfile do
       {:nerves, "~> 0.7.2", runtime: false},
       {:exactor, "~> 2.2.3", warn_missing: false},
       {:nerves_ntp, "~> 0.1.1"},
+      {:httpotion, "~> 3.0.2"},
+      {:poison, "~> 3.1.0"},
     ] ++ deps(@target)
   end
 

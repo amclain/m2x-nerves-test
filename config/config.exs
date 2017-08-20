@@ -34,4 +34,9 @@ config :nerves_ntp, :servers, [
   "3.pool.ntp.org",
 ]
 
-config :m2x_nerves_input, :ledpin, pin: 26
+config :m2x_nerves, :led_gpio, 44
+config :m2x_nerves, :switch_gpio, 26
+config :m2x_nerves, :m2x_switch_stream_name, "switch_1"
+config :m2x_nerves, :network_interface, "eth0"
+
+import_config "dev.exs"

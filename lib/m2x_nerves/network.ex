@@ -8,7 +8,7 @@ defmodule M2XNerves.Network do
 
   defmodule State, do: defstruct [:ntp_started, :interface, :ip_address, :connected]
 
-  @interface "eth0"
+  @interface Application.get_env(:m2x_nerves, :network_interface)
   @settings [ipv4_address_method: :dhcp]
   @connectivity_check_hostname 'google.com'
 
@@ -44,8 +44,6 @@ defmodule M2XNerves.Network do
           true
         _ -> state.ntp_started
       end
-
-    # if connected && !state.ntp_started, do: Ntp.Worker.start_link
 
     new_state(%State{
       state |

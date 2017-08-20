@@ -5,7 +5,7 @@ defmodule M2XNerves.StatusLED do
 
   defmodule State, do: defstruct [:led_pid]
 
-  @led_pin 44
+  @led_pin Application.get_env(:m2x_nerves, :led_gpio)
 
   defstart start_link do
     Logger.debug("Starting pin #{@led_pin} as output")
