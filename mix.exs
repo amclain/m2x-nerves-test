@@ -53,7 +53,7 @@ defmodule M2XNerves.Mixfile do
   def deps do
     [
       {:nerves, "~> 0.7.2", runtime: false},
-      {:exactor, "~> 2.2.3"},
+      {:exactor, "~> 2.2.3", warn_missing: false},
     ] ++ deps(@target)
   end
 

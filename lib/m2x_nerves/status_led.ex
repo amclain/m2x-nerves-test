@@ -1,23 +1,37 @@
 defmodule M2XNerves.StatusLED do
   require Logger
 
-  # TODO: Refactor to genserver ################################################
+  use ExActor.GenServer
 
-  @output_pin 44
+  defmodule State, do: defstruct [:led_pid]
 
-  def start_link do
-    Logger.debug("Starting pin #{@output_pin} as output")
+  @led_pin 44
 
-    Gpio.start_link(@output_pin, :output)
+  defstart start_link do
+    Logger.debug("Starting pin #{@led_pin} as output")
+
+    {:ok, pid} = Gpio.start_link(@led_pin, :output)
+
+    initial_state(%State{led_pid: pid})
   end
 
-  def on(pid) do
+  defcast stop, state: state do
+    Gpio.stop(state.led_pid)
+
+    stop_server(:normal)
+  end
+
+  defcast on, state: state do
     Logger.debug("LED on")
-    Gpio.write(pid, 1)
+    Gpio.write(state.led_pid, 1)
+
+    noreply()
   end
 
-  def off(pid) do
+  defcast off, state: state do
     Logger.debug("LED off")
-    Gpio.write(pid, 0)
+    Gpio.write(state.led_pid, 0)
+
+    noreply()
   end
 end
