@@ -54,6 +54,7 @@ defmodule M2XNerves.Mixfile do
     [
       {:nerves, "~> 0.7.2", runtime: false},
       {:exactor, "~> 2.2.3", warn_missing: false},
+      {:nerves_ntp, "~> 0.1.1"},
     ] ++ deps(@target)
   end
 

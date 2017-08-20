@@ -4,8 +4,9 @@ defmodule M2XNerves.Network do
   use ExActor.GenServer, export: __MODULE__
 
   alias Nerves.Network
+  alias Nerves.Ntp
 
-  defmodule State, do: defstruct [:interface, :ip_address, :connected]
+  defmodule State, do: defstruct [:ntp_started, :interface, :ip_address, :connected]
 
   @interface "eth0"
   @settings [ipv4_address_method: :dhcp]
@@ -15,7 +16,12 @@ defmodule M2XNerves.Network do
     Network.setup(@interface, @settings)
     SystemRegistry.register
 
-    initial_state(%State{interface: @interface, ip_address: nil, connected: false})
+    initial_state(%State{
+      interface: @interface,
+      ip_address: nil,
+      connected: false,
+      ntp_started: false,
+    })
   end
 
   defcall connected?, state: state, do: set_and_reply(state, state.connected)
@@ -31,7 +37,22 @@ defmodule M2XNerves.Network do
       test_connectivity()
     )
 
-    new_state(%State{state | ip_address: ip, connected: connected})
+    ntp_started =
+      case connected && !state.ntp_started do
+        true ->
+          Ntp.Worker.start_link
+          true
+        _ -> state.ntp_started
+      end
+
+    # if connected && !state.ntp_started, do: Ntp.Worker.start_link
+
+    new_state(%State{
+      state |
+      ip_address: ip,
+      connected: connected,
+      ntp_started: ntp_started,
+    })
   end
 
   def test_connectivity do
