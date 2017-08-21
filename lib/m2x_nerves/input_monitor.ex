@@ -3,10 +3,9 @@ defmodule M2XNerves.InputMonitor do
 
   use ExActor.GenServer
 
-  alias M2XNerves.StatusLED
   alias M2XNerves.M2X
 
-  defmodule State, do: defstruct [:input_pid, :led_pid]
+  defmodule State, do: defstruct [:input_pid]
 
   @input_pin Application.get_env(:m2x_nerves, :switch_gpio)
 
@@ -14,16 +13,14 @@ defmodule M2XNerves.InputMonitor do
     Logger.debug("Starting input on pin #{@input_pin}")
 
     {:ok, input_pid} = Gpio.start_link(@input_pin, :input)
-    {:ok, led_pid} = StatusLED.start_link
 
     Gpio.set_int(input_pid, :both)
 
-    initial_state(%State{input_pid: input_pid, led_pid: led_pid})
+    initial_state(%State{input_pid: input_pid})
   end
 
   defcast stop, state: state do
     Gpio.stop(state.input_pin)
-    StatusLED.stop(state.led_pid)
 
     stop_server(:normal)
   end
@@ -32,12 +29,8 @@ defmodule M2XNerves.InputMonitor do
     Logger.debug("Received #{edge} event on pin #{@input_pin}")
 
     case edge do
-      :rising ->
-        StatusLED.on(state.led_pid)
-        M2X.update(1)
-      _ ->
-        StatusLED.off(state.led_pid)
-        M2X.update(0)
+      :rising -> M2X.update_switch_state(1)
+      _ -> M2X.update_switch_state(0)
     end
 
     noreply()

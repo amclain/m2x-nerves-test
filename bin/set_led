@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Set the state of the LED on the hardware (on/off)
+
+# Env vars:
+# API_KEY   - M2X *MASTER* API key
+# DEVICE_ID - M2X device ID
+
+# Params
+# $1 - LED state: 0 = off, 1 = on
+
+# Usage
+# API_KEY=ABCDE DEVICE_ID=12345 set_led 1
+
+set -e
+
+curl -w "\n" -X POST -H "CONTENT-TYPE: application/json" -H "X-M2X-KEY: $API_KEY" \
+-d "{\"name\":\"led_state\",\"data\":{\"state\":\"$1\"},\"targets\":{\"devices\":[\"$DEVICE_ID\"]}}" \
+"https://api-m2x.att.com/v2/commands"

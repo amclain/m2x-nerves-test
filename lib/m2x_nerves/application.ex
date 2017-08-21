@@ -4,6 +4,7 @@ defmodule M2XNerves.Application do
   alias M2XNerves.InputMonitor
   alias M2XNerves.M2X
   alias M2XNerves.Network
+  alias M2XNerves.StatusLED
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -13,8 +14,9 @@ defmodule M2XNerves.Application do
     # Define workers and child supervisors to be supervised
     children = [
       worker(InputMonitor, []),
-      worker(M2X, []),
+      worker(StatusLED, []),
       worker(Network, []),
+      worker(M2X, []),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

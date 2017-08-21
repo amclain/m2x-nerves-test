@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# List the device's pending (unacknowledged) commands.
+
+# Env vars:
+# API_KEY   - M2X API key
+# DEVICE_ID - M2X device ID
+
+# Usage
+# API_KEY=ABCDE DEVICE_ID=12345 pending_commands
+
+set -e
+
+curl -w "\n" -H "X-M2X-KEY: $API_KEY" \
+"https://api-m2x.att.com/v2/devices/$DEVICE_ID/commands?status=pending"

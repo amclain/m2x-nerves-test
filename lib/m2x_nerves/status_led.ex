@@ -1,7 +1,7 @@
 defmodule M2XNerves.StatusLED do
   require Logger
 
-  use ExActor.GenServer
+  use ExActor.GenServer, export: __MODULE__
 
   defmodule State, do: defstruct [:led_pid]
 

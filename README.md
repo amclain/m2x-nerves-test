@@ -60,5 +60,12 @@ user button (S2) while rebooting.
 
 ## Running
 
-Holding down the switch (`GPIO_26`) will send a value of `1` to M2X. Releasing
-the switch will send a value of `0`. This will be shown on the M2X stream graph.
+Closing the switch (`GPIO_26`) will send a value of `1` to M2X. Opening the
+switch will send a value of `0`. This will be shown on the M2X stream graph/log.
+
+Run `bin/set_led` to send an M2X command to turn the LED on(`1`)/off(`0`). The
+API key must be an account **master** API key.
+
+```text
+API_KEY=ABCDE DEVICE_ID=12345 set_led 1
+```
