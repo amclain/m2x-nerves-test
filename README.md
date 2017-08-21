@@ -20,6 +20,9 @@ GPIO_26  (P8-14): Switch
 GPIO_44  (P8-12): LED (w/ 1k current limiting resistor)
 ```
 
+![Breadboard](docs/breadboard.jpg)
+![Schematic](docs/schematic.png)
+
 ## Configuration
 
 * Copy `config/dev.sample.exs` to `config/dev.exs`.
